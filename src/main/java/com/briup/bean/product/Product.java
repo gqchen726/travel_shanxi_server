@@ -1,4 +1,4 @@
-package com.briup.bean.user;
+package com.briup.bean.product;
 
 import javax.persistence.*;
 
@@ -9,7 +9,7 @@ public class Product {
     @Column(name = "productName",unique = true,nullable = false)
     private String  productName;
     @Id
-    @Column(name = "productCode")
+    @Column(name = "product_code")
     private String productCode;
     @Column(name = "description")
     private String description;
@@ -17,6 +17,16 @@ public class Product {
     private String price;
     @Column(name = "ex")
     private String ex;
+    @Column(name = "category")
+    private String category;
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
     public String getProductName() {
         return productName;

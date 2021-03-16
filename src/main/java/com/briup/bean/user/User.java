@@ -1,7 +1,12 @@
 package com.briup.bean.user;
 
+import com.briup.bean.order.Order;
+
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 @Entity
 @Table(name = "t_users")
 public class User {
@@ -27,7 +32,10 @@ public class User {
     private String registerCode;
     @Column(name = "approval")
     private String approval;
-
+    @Column(name = "admin")
+    private String admin;
+    @OneToMany(targetEntity = Order.class,cascade = CascadeType.ALL,mappedBy = "")
+    private List<Order> orders = new ArrayList<>();
     public String getName() {
         return name;
     }
@@ -104,10 +112,44 @@ public class User {
         return approval;
     }
 
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
     public void setApproval(String approval) {
         this.approval = approval;
     }
 
+    public String getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(String admin) {
+        this.admin = admin;
+    }
+
     public User() {
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", mobileNumber='" + mobileNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", address='" + address + '\'' +
+                ", sex='" + sex + '\'' +
+                ", age='" + age + '\'' +
+                ", birth=" + birth +
+                ", registerCode='" + registerCode + '\'' +
+                ", approval='" + approval + '\'' +
+                ", admin='" + admin + '\'' +
+                ", orders=" + orders +
+                '}';
     }
 }
