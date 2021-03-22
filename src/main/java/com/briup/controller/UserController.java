@@ -73,7 +73,7 @@ public class UserController {
         Optional<User> byId = userDao.findById(mobileNumber);
         if (!byId.isPresent()){
             b  =  true;
-        }
+        }   
         return new SimpleRespose(b,null,"0");
     }
 }

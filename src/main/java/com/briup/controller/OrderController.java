@@ -2,6 +2,7 @@ package com.briup.controller;
 
 import com.briup.bean.order.Order;
 import com.briup.bean.order.ex.OrderCreate;
+import com.briup.bean.order.ex.OrderStatus;
 import com.briup.bean.product.Product;
 import com.briup.bean.user.User;
 import com.briup.common.respose.SimpleRespose;
@@ -10,11 +11,10 @@ import com.briup.dao.ProductDao;
 import com.briup.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -35,12 +35,19 @@ public class OrderController {
      * @param orderCreate
      * @return
      */
-    @RequestMapping("create")
+    @PostMapping("create")
     @ResponseBody
     public Object create(@RequestBody OrderCreate orderCreate){
         Order order = generatedOrder(orderCreate);
         Order save = orderDao.save(order);
         return new SimpleRespose(save,"下单成功","0");
+    }
+
+    @GetMapping("listAllOrder")
+    @ResponseBody
+    public Object listAll(@RequestParam(name = "mobileNumber") String mobileNumber){
+        List<Order> orders = orderDao.listAllOrder(mobileNumber);
+        return new SimpleRespose(orders,"","0");
     }
 
     /**
@@ -53,10 +60,18 @@ public class OrderController {
         Optional<Product> productDaoById = productDao.findById(orderCreate.getProductCode());
         User user = userById.get();
         Product product = productDaoById.get();
-        Order order = orderCreate.getOrder();
+        Order order = new Order();
+        order.setProduct(product);
         order.setUser(user);
-        order.setProductCode(product);
+        //设置订单状态
+        order.setStatus(OrderStatus.GENERATED.getName());
+        //生成订单号
         order.setOrderId(String.valueOf(System.currentTimeMillis()));
+        //计算订单价钱
+        Integer productNum = orderCreate.getProductNum();
+        order.setTotalPrice(String.valueOf(productNum*(Long.parseLong(product.getPrice()))));
+        //订单生成时间
+        order.setGenerationDate(new Date());
         return order;
     }
 }

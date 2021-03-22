@@ -15,7 +15,7 @@ public class Order {
     private String status;
     @OneToOne(targetEntity = Product.class)
     @JoinColumn(name = "product_code" ,referencedColumnName = "product_code")
-    private Product productCode;
+    private Product product ;
     @Column(name = "totalPrice")
     private String totalPrice;
     @Column(name = "generationDate")
@@ -47,12 +47,12 @@ public class Order {
         this.status = status;
     }
 
-    public Product getProductCode() {
-        return productCode;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProductCode(Product productCode) {
-        this.productCode = productCode;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public String getTotalPrice() {
@@ -108,7 +108,7 @@ public class Order {
         return "Order{" +
                 "OrderId='" + OrderId + '\'' +
                 ", status='" + status + '\'' +
-                ", productCode=" + productCode +
+                ", productCode=" + product +
                 ", totalPrice='" + totalPrice + '\'' +
                 ", generationDate=" + generationDate +
                 ", productNum=" + productNum +

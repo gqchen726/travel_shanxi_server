@@ -4,18 +4,18 @@ import com.briup.bean.order.Order;
 
 public class OrderCreate {
 
-    private Order order;
+    private Integer productNum;
 
     private String mobileNumber;
 
     private String productCode;
 
-    public Order getOrder() {
-        return order;
+    public Integer getProductNum() {
+        return productNum;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setProductNum(Integer productNum) {
+        this.productNum = productNum;
     }
 
     public String getMobileNumber() {
