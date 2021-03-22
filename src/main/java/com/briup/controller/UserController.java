@@ -7,9 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 import java.util.Random;
@@ -26,8 +24,9 @@ public class UserController {
     public Object login(@RequestBody User user){
         Optional<User> one = userDao.findById(user.getMobileNumber());
         if (one.isPresent()){
-            if (one.get().getPassword().equals(user.getPassword()));
-            return new SimpleRespose(one.get(),"登录成功","0");
+            if (one.get().getPassword().equals(user.getPassword())) {
+                return new SimpleRespose(one.get(), "登录成功", "0");
+            }
         }
         return new SimpleRespose(null,"用户名或密码错误","1");
     }
@@ -65,5 +64,16 @@ public class UserController {
             stop = one.isPresent() ? true : false;
         }
         return sb.toString();
+    }
+
+    @GetMapping("checkMobileNumber")
+    @ResponseBody
+    public Object checkMobileNumber(@RequestParam String mobileNumber){
+        boolean b = false;
+        Optional<User> byId = userDao.findById(mobileNumber);
+        if (!byId.isPresent()){
+            b  =  true;
+        }
+        return new SimpleRespose(b,null,"0");
     }
 }
