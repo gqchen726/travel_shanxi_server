@@ -2,6 +2,8 @@ package com.briup.controller;
 
 import com.briup.bean.order.Order;
 import com.briup.bean.order.ex.OrderCreate;
+import com.briup.bean.order.ex.OrderDetail;
+import com.briup.bean.order.ex.OrderRespose;
 import com.briup.bean.order.ex.OrderStatus;
 import com.briup.bean.product.Product;
 import com.briup.bean.user.User;
@@ -13,9 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 @RequestMapping("order/")
@@ -43,11 +43,22 @@ public class OrderController {
         return new SimpleRespose(save,"下单成功","0");
     }
 
+    @GetMapping("getOrderById")
+    @ResponseBody
+    public Object getOrderById(@RequestParam("oderId") String orderId ){
+        Optional<Order> byId = orderDao.findById(orderId);
+        return new SimpleRespose(byId.isPresent()? new OrderRespose(byId.get()):null,null,"0");
+    }
     @GetMapping("listAllOrder")
     @ResponseBody
     public Object listAll(@RequestParam(name = "mobileNumber") String mobileNumber){
         List<Order> orders = orderDao.listAllOrder(mobileNumber);
-        return new SimpleRespose(orders,"","0");
+        List<OrderRespose> orderDetails = new ArrayList<>();
+        for (Order order : orders){
+            OrderRespose orderDetail = new OrderRespose(order);
+            orderDetails.add(orderDetail);
+        }
+        return new SimpleRespose(orderDetails,null,"0");
     }
 
     /**

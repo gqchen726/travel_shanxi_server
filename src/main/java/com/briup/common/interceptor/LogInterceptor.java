@@ -15,6 +15,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.servlet.mvc.condition.RequestConditionHolder;
 import org.springframework.web.servlet.support.RequestContext;
 
+/*
 @Aspect
 @Component
 public class LogInterceptor  {
@@ -39,3 +40,4 @@ public class LogInterceptor  {
         logger.info(sb.toString());
     }
 }
+*/
