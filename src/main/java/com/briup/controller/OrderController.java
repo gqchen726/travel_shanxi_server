@@ -40,7 +40,7 @@ public class OrderController {
     public Object create(@RequestBody OrderCreate orderCreate){
         Order order = generatedOrder(orderCreate);
         Order save = orderDao.save(order);
-        return new SimpleRespose(save,"下单成功","0");
+        return new SimpleRespose(new OrderRespose(order),"下单成功","0");
     }
 
     @GetMapping("getOrderById")
