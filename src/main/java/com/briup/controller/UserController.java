@@ -76,4 +76,16 @@ public class UserController {
         }   
         return new SimpleRespose(b,null,"0");
     }
+
+    @PostMapping("update")
+    @ResponseBody
+    public Object update(@RequestBody User user){
+        Optional<User> findUser = userDao.findById(user.getMobileNumber());
+        if (findUser.isPresent()){
+            User user1 = findUser.get();
+            user1 = user;
+            return new SimpleRespose(userDao.save(user1),"success","0");
+        }else
+            return new SimpleRespose(null,"该用户不存在","1");
+    }
 }
