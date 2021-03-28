@@ -1,5 +1,6 @@
 package com.briup.bean.product;
 
+
 import javax.persistence.*;
 
 @Entity

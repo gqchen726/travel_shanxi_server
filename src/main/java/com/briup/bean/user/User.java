@@ -1,7 +1,7 @@
 package com.briup.bean.user;
 
+import com.briup.bean.collection.CollectionDetail;
 import com.briup.bean.order.Order;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -35,11 +35,10 @@ public class User {
     private String approval;
     @Column(name = "admin")
     private String admin;
-    @OneToMany(targetEntity = Order.class, cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = Order.class)
     private List<Order> orders = new ArrayList<>();
 
-    /*    @OneToMany(mappedBy = "t_users",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
-        private List<Collection> collectionList;*/
+
     public String getName() {
         return name;
     }
@@ -116,14 +115,6 @@ public class User {
         return approval;
     }
 
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
-
     public void setApproval(String approval) {
         this.approval = approval;
     }
@@ -136,24 +127,12 @@ public class User {
         this.admin = admin;
     }
 
-    public User() {
+    public List<Order> getOrders() {
+        return orders;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "name='" + name + '\'' +
-                ", password='" + password + '\'' +
-                ", mobileNumber='" + mobileNumber + '\'' +
-                ", email='" + email + '\'' +
-                ", address='" + address + '\'' +
-                ", sex='" + sex + '\'' +
-                ", age='" + age + '\'' +
-                ", birth=" + birth +
-                ", registerCode='" + registerCode + '\'' +
-                ", approval='" + approval + '\'' +
-                ", admin='" + admin + '\'' +
-                ", orders=" + orders +
-                '}';
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
+
 }
