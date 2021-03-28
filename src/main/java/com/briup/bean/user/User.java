@@ -1,6 +1,7 @@
 package com.briup.bean.user;
 
 import com.briup.bean.order.Order;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class User {
     @Column(name = "password")
     private String password;
     @Id//主键
-    @Column(name="mobileNumber")
+    @Column(name = "mobileNumber")
     private String mobileNumber;
     @Column(name = "email")
     private String email;
@@ -34,8 +35,11 @@ public class User {
     private String approval;
     @Column(name = "admin")
     private String admin;
-    @OneToMany(targetEntity = Order.class,cascade = CascadeType.ALL,mappedBy = "")
+    @OneToMany(targetEntity = Order.class, cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<>();
+
+    /*    @OneToMany(mappedBy = "t_users",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
+        private List<Collection> collectionList;*/
     public String getName() {
         return name;
     }

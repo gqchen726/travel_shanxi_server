@@ -6,7 +6,8 @@ import com.briup.bean.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.Serializable;
-@JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
+
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 public class OrderRespose {
 
     private OrderDetail order;
@@ -26,7 +27,7 @@ public class OrderRespose {
         this.product = order.getProduct();
     }
 
-    public OrderRespose(Order order,boolean includeUser) {
+    public OrderRespose(Order order, boolean includeUser) {
         this.order = new OrderDetail(order);
         this.product = order.getProduct();
         this.user = order.getUser();

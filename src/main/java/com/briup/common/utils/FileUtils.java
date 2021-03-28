@@ -26,7 +26,7 @@ public class FileUtils {
     public static void readAndWrite(InputStream in, OutputStream out) throws IOException {
         int len = 0;
         byte[] b = new byte[1024];
-        while ((len = in.read(b)) != -1 ){
+        while ((len = in.read(b)) != -1) {
             out.write(b);
         }
         in.close();
@@ -38,21 +38,21 @@ public class FileUtils {
     }
 
     public static File getFile() {
-        if (null == file){
+        if (null == file) {
             String filePath = System.getProperty("user.dir");
-            file = new File(filePath+"\\photo");
-            if (!file.exists()){
+            file = new File(filePath + "\\photo");
+            if (!file.exists()) {
                 file.mkdirs();
             }
         }
         return file;
     }
 
-    public static String getFilePath(){
-        if (null == file){
+    public static String getFilePath() {
+        if (null == file) {
             String filePath = System.getProperty("user.dir");
-            file = new File(filePath+"\\photo");
-            if (!file.exists()){
+            file = new File(filePath + "\\photo");
+            if (!file.exists()) {
                 file.mkdirs();
             }
         }

@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 
-public interface OrderDao extends JpaRepository<Order,String> {
+public interface OrderDao extends JpaRepository<Order, String> {
     @Query("select o from Order as o where o.user.mobileNumber = :mobileNumber")
-    List<Order> listAllOrder( String mobileNumber);
+    List<Order> listAllOrder(String mobileNumber);
 }

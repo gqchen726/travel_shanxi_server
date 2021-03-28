@@ -5,17 +5,18 @@ import com.briup.bean.user.User;
 
 import javax.persistence.*;
 import java.util.Date;
+
 @Entity
 @Table(name = "t_order")
 public class Order {
     @Id
-    @Column(name="order_id")
+    @Column(name = "order_id")
     private String OrderId;
     @Column(name = "status")
     private String status;
     @OneToOne(targetEntity = Product.class)
-    @JoinColumn(name = "product_code" ,referencedColumnName = "product_code")
-    private Product product ;
+    @JoinColumn(name = "product_code", referencedColumnName = "product_code")
+    private Product product;
     @Column(name = "totalPrice")
     private String totalPrice;
     @Column(name = "generationDate")
@@ -23,12 +24,12 @@ public class Order {
     @Column(name = "product_Num")
     private Integer productNum;
     //
-    @Column(name ="startDate")
+    @Column(name = "startDate")
     private Date startDate;
     @Column(name = "enddate")
     private Date enddate;
 
-    @ManyToOne(cascade = CascadeType.ALL,targetEntity = User.class)
+    @ManyToOne(cascade = CascadeType.ALL, targetEntity = User.class)
     private User user;
 
     public String getOrderId() {

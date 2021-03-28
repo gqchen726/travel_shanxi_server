@@ -6,14 +6,14 @@ import javax.persistence.*;
 @Table(name = "t_product")
 public class Product {
 
-    @Column(name = "productName",unique = true,nullable = false)
-    private String  productName;
+    @Column(name = "productName", unique = true, nullable = false)
+    private String productName;
     @Id
     @Column(name = "product_code")
     private String productCode;
     @Column(name = "description")
     private String description;
-    @Column(name = "price" , nullable = false)
+    @Column(name = "price", nullable = false)
     private String price;
     @Column(name = "ex")
     private String ex;

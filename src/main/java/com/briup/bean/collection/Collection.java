@@ -1,5 +1,6 @@
 /*
 
+
 package com.briup.bean.collection;
 
 import com.briup.bean.product.Product;
@@ -12,21 +13,26 @@ import javax.persistence.*;
 public class Collection {
     @Id
     private String id;
-
+*/
+/*
     @OneToOne(targetEntity = Product.class)
     @JoinColumn(name = "productId" ,referencedColumnName = "product_code")
-    private Product product;
+    private Product product;*//*
 
-    @ManyToOne(cascade = CascadeType.ALL,targetEntity = User.class)
+
+    @ManyToOne(optional = false ,cascade = CascadeType.MERGE,targetEntity = User.class)
+    @JoinColumn(name = "user_id",referencedColumnName = )
     private User user;
 
-    public Product getProduct() {
+  */
+/*  public Product getProduct() {
         return product;
     }
 
     public void setProduct(Product product) {
         this.product = product;
-    }
+    }*//*
+
 
     public User getUser() {
         return user;
@@ -48,5 +54,6 @@ public class Collection {
     public Collection() {
     }
 }
+
 
 */

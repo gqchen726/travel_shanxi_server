@@ -5,13 +5,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
 
 /**
- *  code   0 成功  1 失败
+ * code   0 成功  1 失败
  *
  * @param <T>
  */
 public class SimpleRespose<T> {
 
-    private  T body;
+    private T body;
 
     private String message;
 
@@ -33,7 +33,7 @@ public class SimpleRespose<T> {
         this.time = new Date();
     }
 
-    public SimpleRespose(T body,String message,String code){
+    public SimpleRespose(T body, String message, String code) {
         this.body = body;
         this.message = message;
         this.code = code;
@@ -63,6 +63,7 @@ public class SimpleRespose<T> {
     public void setCode(String code) {
         this.code = code;
     }
+
     @JsonFormat(pattern = "yyyy/MM/dd")
     public Date getTime() {
         return time;
