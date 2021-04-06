@@ -3,6 +3,7 @@ package com.briup.controller;
 import com.briup.bean.user.User;
 import com.briup.bean.user.ex.ChangePassword;
 import com.briup.common.respose.SimpleRespose;
+import com.briup.common.utils.EmailUtils;
 import com.briup.dao.UserDao;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,10 @@ import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Optional;
 import java.util.Random;
 
@@ -93,16 +98,46 @@ public class UserController {
 
     @PostMapping("changePassword")
     @ResponseBody
-    public Object changePassword(@RequestBody ChangePassword changePassword) {
+    public Object changePassword(@RequestBody ChangePassword changePassword,HttpServletRequest request) {
         Optional<User> byId = userDao.findById(changePassword.getMobileNumber());
         if (byId.isPresent()) {
-            if (byId.get().getPassword().equals(changePassword.getOldPassword())) {
-                byId.get().setPassword(changePassword.getNewPassword());
-                return new SimpleRespose(userDao.save(byId.get()), "修改成功", "");
-            } else {
-                return new SimpleRespose(null, "密码修改失败，请确认旧密码", "1");
+        if (!StringUtils.isEmpty(changePassword.getOldPassword()))   {
+                if (byId.get().getPassword().equals(changePassword.getOldPassword())) {
+                    byId.get().setPassword(changePassword.getNewPassword());
+                    return new SimpleRespose(userDao.save(byId.get()), "修改成功", "0");
+                } else {
+                    return new SimpleRespose(null, "密码修改失败，请确认旧密码", "1");
+                }
+            }
+            Object code = request.getSession().getAttribute("checkCode");
+            if (!StringUtils.isEmpty((String)code)){
+                String code1 = (String) code;
+                if (code1.equals(changePassword.getCheckCode())){
+                    byId.get().setPassword(changePassword.getNewPassword());
+                    return new SimpleRespose(userDao.save(byId.get()), "修改成功", "0");
+                }
+            }
+            return new SimpleRespose(null, "验证码错误，请重试", "1");
+        }
+        return null;
+    }
+
+    @GetMapping("sendEmail")
+    @ResponseBody
+    public Object sendEmail(@RequestParam(name = "mobileNumber",required = true) String mobileNumber, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Optional<User> byId = userDao.findById(mobileNumber);
+        if (byId.isPresent()){
+            String account = byId.get().getEmail();
+            String subject = "您正在通过邮件修改密码，您的验证码为 {code} ,如非本人操作，请忽略";
+            String randomString = getRandomString();
+            subject.replace("{code}",randomString);
+            if(EmailUtils.sendemail(account, "修改密码", subject)){
+                HttpSession session = request.getSession();
+                session.setAttribute("checkCode",randomString);
+                return new SimpleRespose(null,"success","0");
             }
         }
         return null;
     }
+
 }

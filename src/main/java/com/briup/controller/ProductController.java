@@ -8,15 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("product/")
@@ -50,27 +47,42 @@ public class ProductController {
     public Object getProductById(@RequestParam(name = "id") String id) {
         return new SimpleRespose(productDao.findById(id).isPresent() ? productDao.findById(id).get() : null, null, "0");
     }
-
-    @PostMapping("imageUpload")
+    @GetMapping("searchSimpleProduct")
     @ResponseBody
-    public Object imageUpload(@RequestBody MultipartFile file) throws IOException {
-        String originalFilename = file.getOriginalFilename();
-        String fileName = originalFilename.substring(0, originalFilename.lastIndexOf("."));
-        String fileType = originalFilename.substring(originalFilename.lastIndexOf("."));
-        fileName = fileName.concat(String.valueOf(System.currentTimeMillis())).concat(fileType);
-        FileUtils.readAndWrite(file.getInputStream(), new FileOutputStream(new File(FileUtils.getFilePath().concat("\\" + fileName))));
-        return new SimpleRespose(fileName, "上传成功", "0");
+    public Object searchSimpleProduct(@RequestParam(name = "keywords", required = false) String keywords) {
+        if ("null".equals(keywords)) {
+            return new SimpleRespose(null, null, "0");
+        }
+        List<Product> products = productDao.searchProduct(keywords);
+        if (products.size()>  0){
+            List<Map> collect = products.stream().map(Product::getSimpleProduct).collect(Collectors.toList());
+            return new SimpleRespose(collect,null,"0");
+        }
+        return new SimpleRespose(null, null, "0");
     }
 
-    @GetMapping("getImage")
+    @GetMapping("getAllCategory")
     @ResponseBody
-    public Object getImage(@RequestParam String file, HttpServletResponse response) throws IOException {
-        ServletOutputStream outputStream = response.getOutputStream();
-        File file1 = new File(FileUtils.getFilePath().concat("\\" + file));
-        if (file1.exists()) {
-            FileUtils.readAndWrite(new FileInputStream(file1), outputStream);
-            return null;
+    public Object getAllCategory(){
+        return new SimpleRespose(productDao.getAllCategory(),null,"0");
+    }
+
+    @GetMapping("delete")
+    @ResponseBody
+    public Object delete(@RequestParam String productCode){
+        Optional<Product> productDaoById = productDao.findById(productCode);
+        if (productDaoById.isPresent()){
+            String resources = productDaoById.get().getResources();
+            if (resources != null) {
+                String[] split = resources.split(";");
+                for ( String s : split){
+                    FileUtils.deleteFile(s);
+                }
+            }
+            productDao.deleteById(productCode);
+
+            return new SimpleRespose(null,"删除成功","0");
         }
-        return new SimpleRespose(null, "文件不存在", "1");
+        return new SimpleRespose(null,"产品补存在","1");
     }
 }

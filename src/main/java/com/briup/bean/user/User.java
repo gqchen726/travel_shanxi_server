@@ -37,7 +37,16 @@ public class User {
     private String admin;
     @OneToMany(targetEntity = Order.class)
     private List<Order> orders = new ArrayList<>();
+    @Column(name = "avatar")
+    private String avatar;
 
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 
     public String getName() {
         return name;

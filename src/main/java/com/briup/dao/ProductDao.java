@@ -14,4 +14,6 @@ import java.util.List;
 public interface ProductDao extends JpaRepository<Product, String> {
     @Query(value = "select p from Product as p where p.productCode like concat(:key,'%')  or p.productName like concat(:key,'%') or p.category like concat(:key,'%')")
     List<Product> searchProduct(@Param("key") String key);
+    @Query(value = "select distinct p.category from Product as p where 1 = 1")
+    List<String> getAllCategory();
 }

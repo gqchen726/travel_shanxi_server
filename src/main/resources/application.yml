@@ -18,3 +18,8 @@ spring:
   banner:
     image:
       location: a.txt
+
+email:
+  emailAccount: 1579576290@qq.com
+  emailAccessKey: koaeyafyudxjghgj
+  emailServer: smtp.qq.com

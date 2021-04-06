@@ -2,7 +2,8 @@ package com.briup.bean.order.ex;
 
 public enum OrderStatus {
     GENERATED("generated"),
-    PAID("generated");
+    PAID("generated"),
+    DELETE("delete");
     private String name;
 
     public String getName() {

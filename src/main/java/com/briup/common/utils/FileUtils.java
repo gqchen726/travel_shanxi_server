@@ -11,17 +11,6 @@ public class FileUtils {
     private static File file;
 
 
-/*
-    static {
-        if (null == file){
-            String filePath = System.getProperty("user.dir");
-            file = new File(filePath+"\\photo");
-            if (!file.exists()){
-                file.mkdirs();
-            }
-        }
-    }
-*/
 
     public static void readAndWrite(InputStream in, OutputStream out) throws IOException {
         int len = 0;
@@ -57,5 +46,20 @@ public class FileUtils {
             }
         }
         return file.getPath();
+    }
+
+    public static boolean deleteFile(File file){
+        if (file.exists()){
+            return  file.delete();
+        }
+        return false;
+    }
+
+    public static boolean deleteFile(String fileName){
+        File file = new File(getFilePath().concat("\\"+fileName));
+        if (file.exists()){
+            return  FileUtils.file.delete();
+        }
+        return false;
     }
 }

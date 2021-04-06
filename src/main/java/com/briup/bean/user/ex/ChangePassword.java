@@ -8,6 +8,8 @@ public class ChangePassword {
 
     private String newPassword;
 
+    private String checkCode;
+
     public ChangePassword() {
     }
 
@@ -15,6 +17,14 @@ public class ChangePassword {
         this.mobileNumber = mobileNumber;
         this.oldPassword = oldPassword;
         this.newPassword = newPassword;
+    }
+
+    public String getCheckCode() {
+        return checkCode;
+    }
+
+    public void setCheckCode(String checkCode) {
+        this.checkCode = checkCode;
     }
 
     public String getMobileNumber() {

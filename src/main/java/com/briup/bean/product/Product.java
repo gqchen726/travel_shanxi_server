@@ -1,7 +1,11 @@
 package com.briup.bean.product;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 @Table(name = "t_product")
@@ -20,6 +24,16 @@ public class Product {
     private String ex;
     @Column(name = "category")
     private String category;
+    @Column(name = "resources")
+    private String resources;
+
+    public String getResources() {
+        return resources;
+    }
+
+    public void setResources(String resources) {
+        this.resources = resources;
+    }
 
     public String getCategory() {
         return category;
@@ -81,5 +95,11 @@ public class Product {
                 ", price='" + price + '\'' +
                 ", ex='" + ex + '\'' +
                 '}';
+    }
+    @JsonIgnore
+    public Map getSimpleProduct(){
+        HashMap<String, String> map = new HashMap<>();
+        map.put("value",this.getProductName());
+        return map;
     }
 }
