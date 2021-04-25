@@ -6,6 +6,8 @@ import com.briup.common.utils.FileUtils;
 import com.briup.dao.ProductDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -85,4 +87,14 @@ public class ProductController {
         }
         return new SimpleRespose(null,"产品补存在","1");
     }
+
+    @PostMapping("update")
+    @ResponseBody
+    public Object update(@RequestBody Product product){
+        Product save = productDao.save(product);
+        return new SimpleRespose(null,"success","0");
+    }
+
+
+
 }

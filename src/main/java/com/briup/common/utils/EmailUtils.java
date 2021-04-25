@@ -3,25 +3,31 @@ package com.briup.common.utils;
 import com.sun.mail.util.MailSSLSocketFactory;
 import com.sun.org.apache.regexp.internal.RE;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
+@Component
 public class EmailUtils {
+
+    private Logger logger = LoggerFactory.getLogger(EmailUtils.class);
     @Value("${email.emailAccount}")
-    private static String emailAccount;
+    private  String emailAccount;
+    @Value("${email.emailAccessKey}")
+    private  String emailAccessKey;
+    @Value("${email.emailServer}")
+    private  String emailServer;
     @Value("${email.emailAccount}")
-    private static String emailAccessKey;
-    @Value("${email.emailAccount}")
-    private static String emailServer;
-    @Value("${email.emailAccount}")
-    private static String port;
+    private  String port;
 
 
-    public static boolean sendemail(final String account,final String subject,final String content) throws Exception {
+    public  boolean sendemail(final String account,final String subject,final String content) throws Exception {
          if (!checkAccount(account)){
              return false;
          }
@@ -71,6 +77,10 @@ public class EmailUtils {
         mimeMessage.setContent(content,"text/html;charset=UTF-8");
 
         //发送邮件
+        logger.info("*************send email");
+        logger.info("*********************** send to "+account);
+        logger.info("*********************** send  "+content);
+        logger.info("*********************** send  subject"+content);
         transport.sendMessage(mimeMessage,mimeMessage.getAllRecipients());
 
         //关闭连接
@@ -78,7 +88,7 @@ public class EmailUtils {
         return true;
     }
 
-    private static boolean checkAccount(final String account){
+    private  boolean checkAccount(final String account){
         if (!StringUtils.isEmpty(account) && account.matches("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$")){
             return true;
         }

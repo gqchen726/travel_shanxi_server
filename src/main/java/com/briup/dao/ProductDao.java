@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
+import java.awt.print.Pageable;
 import java.util.List;
 
 @Repository
@@ -16,4 +17,6 @@ public interface ProductDao extends JpaRepository<Product, String> {
     List<Product> searchProduct(@Param("key") String key);
     @Query(value = "select distinct p.category from Product as p where 1 = 1")
     List<String> getAllCategory();
+
+
 }

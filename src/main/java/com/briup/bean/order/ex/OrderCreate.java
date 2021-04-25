@@ -1,14 +1,27 @@
 package com.briup.bean.order.ex;
 
 import com.briup.bean.order.Order;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class OrderCreate {
+import java.util.Date;
+
+public class  OrderCreate {
 
     private Integer productNum;
 
     private String mobileNumber;
 
     private String productCode;
+    @JsonFormat(pattern = "yyyy/MM/dd")
+    private Date date;
+
+    public Date getDate() {
+        return date;
+    }
+    @JsonFormat(pattern = "yyyy/MM/dd")
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
     public Integer getProductNum() {
         return productNum;
@@ -17,6 +30,7 @@ public class OrderCreate {
     public void setProductNum(Integer productNum) {
         this.productNum = productNum;
     }
+
 
     public String getMobileNumber() {
         return mobileNumber;

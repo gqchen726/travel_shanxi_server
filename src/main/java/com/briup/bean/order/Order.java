@@ -14,7 +14,7 @@ public class Order {
     private String OrderId;
     @Column(name = "status")
     private String status;
-    @OneToOne(targetEntity = Product.class)
+    @OneToOne(targetEntity = Product.class,cascade = {CascadeType.DETACH})
     @JoinColumn(name = "product_code", referencedColumnName = "product_code")
     private Product product;
     @Column(name = "totalPrice")
@@ -29,7 +29,7 @@ public class Order {
     @Column(name = "enddate")
     private Date enddate;
 
-    @ManyToOne(cascade = CascadeType.ALL, targetEntity = User.class)
+    @ManyToOne(targetEntity = User.class)
     private User user;
 
     public String getOrderId() {

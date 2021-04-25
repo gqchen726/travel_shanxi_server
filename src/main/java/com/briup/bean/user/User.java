@@ -2,6 +2,7 @@ package com.briup.bean.user;
 
 import com.briup.bean.collection.CollectionDetail;
 import com.briup.bean.order.Order;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -107,7 +108,7 @@ public class User {
     public Date getBirth() {
         return birth;
     }
-
+    @JsonFormat(pattern = "yyyy/MM/dd")
     public void setBirth(Date birth) {
         this.birth = birth;
     }

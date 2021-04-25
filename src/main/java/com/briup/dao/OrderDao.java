@@ -11,4 +11,6 @@ import java.util.List;
 public interface OrderDao extends JpaRepository<Order, String> {
     @Query("select o from Order as o where o.user.mobileNumber = :mobileNumber")
     List<Order> listAllOrder(String mobileNumber);
+    @Query("select o from Order as o where o.status = :status")
+    List<Order> listAllApprovalOrder(String status);
 }
