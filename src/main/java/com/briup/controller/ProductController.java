@@ -27,7 +27,7 @@ public class ProductController {
     @PostMapping("create")
     @ResponseBody
     public Object create(@RequestBody Product product) {
-        Optional<Product> one = productDao.findOne(Example.of(product));
+        Optional<Product> one = productDao.findById(product.getProductCode());
         if (one.isPresent()) {
             return new SimpleRespose(null, "创建失败，该产品已存在", "1");
         }
