@@ -28,7 +28,9 @@ public class OrderDetail {
         this.generationDate = order.getGenerationDate();
         this.productNum = order.getProductNum();
         this.startDate = order.getStartDate();
-        this.enddate = order.getEnddate();
+        long time = order.getStartDate().getTime();
+        time = time + (60*24*60*60*1000);
+        this.enddate = new Date(time);
     }
 
     public OrderDetail() {
