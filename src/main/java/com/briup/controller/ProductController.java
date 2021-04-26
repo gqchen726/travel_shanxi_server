@@ -95,6 +95,11 @@ public class ProductController {
         return new SimpleRespose(null,"success","0");
     }
 
-
+    @GetMapping("checkProduct")
+    @ResponseBody
+    public  Object checkProduct(@RequestParam String productCode){
+        Optional<Product> productDaoById = productDao.findById(productCode);
+        return new SimpleRespose(productDaoById.isPresent() ,"","0");
+    }
 
 }

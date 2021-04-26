@@ -5,9 +5,9 @@ public enum OrderStatus {
     REJECT("reject"),
     SUBMIT("submission"),
     APPROVAL("approval"),
-    PAID("paoid"),
+    PAID("paid"),
     CANCEL("cancel"),
-    DELETE("delete");
+    DELETE("deleted");
     private String name;
 
     public String getName() {
