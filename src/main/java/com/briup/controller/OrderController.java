@@ -192,4 +192,13 @@ public class OrderController {
             return new SimpleRespose(null, "删除失败", "1");
         }
     }
+    @GetMapping("update")
+    @ResponseBody
+    public Object update(@RequestParam String orderId, @RequestParam String status){
+        Optional<Order> byId = orderDao.findById(orderId);
+        Order order = byId.get();
+        order.setStatus(status);
+        orderDao.save(order);
+        return new SimpleRespose("",status+" 成功","0");
+    }
 }
