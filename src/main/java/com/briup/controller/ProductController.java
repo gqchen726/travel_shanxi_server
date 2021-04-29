@@ -94,7 +94,7 @@ public class ProductController {
         Optional<Product> productDaoById = productDao.findById(product.getProductCode());
         if (productDaoById.isPresent()){
             Product save = productDao.save(product);
-            return new SimpleRespose(null,"success","0");
+            return new SimpleRespose(save,"success","0");
         }
         return new SimpleRespose(null,"更新失败，产品不存在","1");
     }
