@@ -138,7 +138,7 @@ public class UserController {
     @GetMapping("sendEmail")
     @ResponseBody
     public Object sendEmail(@RequestParam(name = "mobileNumber",required = true) String mobileNumber, @RequestParam (name = "email",required = false) String email) throws Exception {
-        if (email ==null ){
+        if (email != null ){
             String subject = "您的注册码为11111，如非本人操作，请忽略";
             String randomString = getRandomString();
             subject = subject.replaceAll("111111",randomString);
