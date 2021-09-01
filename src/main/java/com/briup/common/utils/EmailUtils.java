@@ -1,7 +1,6 @@
 package com.briup.common.utils;
 
 import com.sun.mail.util.MailSSLSocketFactory;
-import com.sun.org.apache.regexp.internal.RE;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

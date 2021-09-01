@@ -14,7 +14,6 @@ import com.briup.dao.OrderDao;
 import com.briup.dao.ProductDao;
 import com.briup.dao.StockDao;
 import com.briup.dao.UserDao;
-import com.sun.org.apache.regexp.internal.RE;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
