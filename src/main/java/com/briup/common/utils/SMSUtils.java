@@ -1,6 +1,6 @@
 package com.briup.common.utils;
 
-import com.tencentcloudapi.common.Credential;
+//import com.tencentcloudapi.common.Credential;
 
 public class SMSUtils {
 
@@ -19,7 +19,7 @@ public class SMSUtils {
          * 您也可以直接在代码中写入密钥对，但需谨防泄露，不要将代码复制、上传或者分享给他人
          * CAM 密钥查询：https://console.cloud.tencent.com/cam/capi
          */
-        Credential cred = new Credential("secretId", "secretKey");
+//        Credential cred = new Credential("secretId", "secretKey");
 
 
     }
