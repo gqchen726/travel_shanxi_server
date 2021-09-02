@@ -5,6 +5,7 @@ import com.briup.bean.user.ex.ChangePassword;
 import com.briup.common.respose.SimpleRespose;
 import com.briup.common.utils.EmailUtils;
 import com.briup.common.utils.RedisUtil;
+import com.briup.common.utils.SpringEmailUtil;
 import com.briup.dao.UserDao;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class UserController {
     @Autowired
     private UserDao userDao;
     @Autowired
-    private EmailUtils emailUtils;
+    private SpringEmailUtil emailUtils;
     @Autowired
     private RedisUtil redisUtil;
 
@@ -102,8 +103,10 @@ public class UserController {
             User user1 = findUser.get();
             user1 = user;
             return new SimpleRespose(userDao.save(user1), "success", "0");
-        } else
+        } else {
             return new SimpleRespose(null, "该用户不存在", "1");
+        }
+
     }
 
     @PostMapping("changePassword")
@@ -139,19 +142,21 @@ public class UserController {
     @ResponseBody
     public Object sendEmail(@RequestParam(name = "mobileNumber",required = true) String mobileNumber, @RequestParam (name = "email",required = false) String email) throws Exception {
         if (email != null ){
-            String subject = "您的注册码为11111，如非本人操作，请忽略";
+            String content = "您正在进行注册操作，验证码为11111，如非本人操作，请忽略";
+            String subject = "修改密码";
             String randomString = getRandomString();
-            subject = subject.replaceAll("111111",randomString);
-            emailUtils.sendemail(email, "修改密码", subject);
+            content = content.replaceAll("111111",randomString);
+            emailUtils.sendEmail(email, subject, content);
             return new SimpleRespose(null,"success","0");
         }
         Optional<User> byId = userDao.findById(mobileNumber);
         if (byId.isPresent()){
             String account = byId.get().getEmail();
-            String subject = "您正在通过邮件修改密码，您的验证码为 111111 ,如非本人操作，请忽略";
+            String content = "您正在通过邮件修改密码，您的验证码为 111111 ,如非本人操作，请忽略";
+            String subject = "修改密码";
             String randomString = getRandomString();
-            subject = subject.replaceAll("111111",randomString);
-            if(emailUtils.sendemail(account, "修改密码", subject)){
+            content = content.replaceAll("111111",randomString);
+            if(emailUtils.sendEmail(account, subject, content)){
                 Jedis connect = redisUtil.getConnect();
                 connect.set(mobileNumber,randomString);
                 connect.expire(mobileNumber,300);

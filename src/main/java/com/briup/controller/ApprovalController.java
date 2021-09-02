@@ -7,6 +7,7 @@ import com.briup.bean.user.User;
 import com.briup.common.respose.SimpleRespose;
 import com.briup.common.utils.EmailUtils;
 import com.briup.common.utils.RedisUtil;
+import com.briup.common.utils.SpringEmailUtil;
 import com.briup.dao.OrderDao;
 import com.briup.dao.ProductDao;
 import com.briup.dao.StockDao;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,8 +38,10 @@ public class ApprovalController {
     private StockDao stockDao;
     @Autowired
     private RedisUtil redisUtil;
-    @Autowired
-    private EmailUtils emailUtils;
+//    @Autowired
+//    private EmailUtils emailUtils;
+    @Resource
+    private SpringEmailUtil emailUtils;
 
 
     @GetMapping("listAll")
@@ -84,7 +88,7 @@ public class ApprovalController {
 
         String subject = "保单审核结果";
 
-        emailUtils.sendemail(email,subject,replace);
+        emailUtils.sendEmail(email,subject,replace);
 
     }
 }

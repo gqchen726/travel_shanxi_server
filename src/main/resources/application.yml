@@ -2,7 +2,6 @@ server:
   port: 8000
   servlet:
     context-path: /
-
 spring:
   datasource:
     # 本地测试
@@ -30,9 +29,7 @@ spring:
     username: 2039256602@qq.com
     password: yqbhtkqxdjyecbge
     default-encoding: UTF-8
-
-email:
-  emailAccount: 2039256602@qq.com
-  emailAccessKey: yqbhtkqxdjyecbge
-  emailServer: smtp.qq.com
-
+#email:
+#  emailAccount: 2039256602@qq.com
+#  emailAccessKey: yqbhtkqxdjyecbge
+#  emailServer: smtp.qq.com

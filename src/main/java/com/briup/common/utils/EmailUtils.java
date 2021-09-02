@@ -12,7 +12,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
-@Component
+//@Component
 public class EmailUtils {
 
     private Logger logger = LoggerFactory.getLogger(EmailUtils.class);
