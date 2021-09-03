@@ -1,1 +1,1 @@
-web: java -Dserver.port=8000 -jar target/design1-0.0.1-SNAPSHOT.jar
+web: java -Dserver.port=$PORT -jar target/design1-0.0.1-SNAPSHOT.jar
