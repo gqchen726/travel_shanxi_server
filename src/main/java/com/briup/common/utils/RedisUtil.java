@@ -12,7 +12,7 @@ public class RedisUtil {
     private static String HOST = "localhost";
 
     private void openConnect(){
-        Jedis jedis = new Jedis("localhost");
+        Jedis jedis = new Jedis("ec2-3-88-74-91.compute-1.amazonaws.com");
         String ping = jedis.ping();
         logger.info(ping);
     }
