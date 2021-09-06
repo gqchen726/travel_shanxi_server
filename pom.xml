@@ -110,6 +110,13 @@
             <artifactId>jedis</artifactId>
             <version>3.5.2</version>
         </dependency>
+
+        <!-- aws-tools -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk</artifactId>
+            <version>1.11.163</version>
+        </dependency>
     </dependencies>
 
 

@@ -2,16 +2,13 @@ package com.briup.controller;
 
 import com.briup.bean.product.Product;
 import com.briup.common.respose.SimpleRespose;
-import com.briup.common.utils.FileUtils;
+import com.briup.common.utils.AWSS3Util;
 import com.briup.dao.ProductDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -23,6 +20,8 @@ public class ProductController {
 
     @Autowired
     private ProductDao productDao;
+    @Resource
+    public AWSS3Util awss3Util;
 
     @PostMapping("create")
     @ResponseBody
@@ -78,7 +77,7 @@ public class ProductController {
             if (resources != null) {
                 String[] split = resources.split(";");
                 for ( String s : split){
-                    FileUtils.deleteFile(s);
+                    awss3Util.delete(s);
                 }
             }
             productDao.deleteById(productCode);
