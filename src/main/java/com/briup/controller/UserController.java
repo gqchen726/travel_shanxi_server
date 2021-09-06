@@ -142,7 +142,7 @@ public class UserController {
     @ResponseBody
     public Object sendEmail(@RequestParam(name = "mobileNumber",required = true) String mobileNumber, @RequestParam (name = "email",required = false) String email) throws Exception {
         if (email != null ){
-            String content = "您正在进行注册操作，验证码为11111，如非本人操作，请忽略";
+            String content = "您正在进行注册操作，验证码为111111，如非本人操作，请忽略";
             String subject = "修改密码";
             String randomString = getRandomString();
             content = content.replaceAll("111111",randomString);
