@@ -27,14 +27,15 @@ public class RedisUtil {
             throw new RuntimeException("URI创建失败");
         }
         HostAndPort hostAndPort = new HostAndPort(HOST, PORT);
-        Jedis jedis = new Jedis(uri);
+        jedis = new Jedis(uri);
         String ping = jedis.ping();
         logger.info("redis 连接测试: {}",ping);
     }
 
     public Jedis getConnect(){
         if(null == jedis){
-            jedis = new Jedis();
+//            jedis = new Jedis();
+            openConnect();
         }
         return jedis;
     }
