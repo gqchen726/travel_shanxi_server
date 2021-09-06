@@ -143,7 +143,7 @@ public class UserController {
     public Object sendEmail(@RequestParam(name = "mobileNumber",required = true) String mobileNumber, @RequestParam (name = "email",required = false) String email) throws Exception {
         if (email != null ){
             String content = "您正在进行注册操作，验证码为111111，如非本人操作，请忽略";
-            String subject = "修改密码";
+            String subject = "操作验证";
             String randomString = getRandomString();
             content = content.replaceAll("111111",randomString);
             emailUtils.sendEmail(email, subject, content);
@@ -153,7 +153,7 @@ public class UserController {
         if (byId.isPresent()){
             String account = byId.get().getEmail();
             String content = "您正在通过邮件修改密码，您的验证码为 111111 ,如非本人操作，请忽略";
-            String subject = "修改密码";
+            String subject = "操作验证";
             String randomString = getRandomString();
             content = content.replaceAll("111111",randomString);
             if(emailUtils.sendEmail(account, subject, content)){

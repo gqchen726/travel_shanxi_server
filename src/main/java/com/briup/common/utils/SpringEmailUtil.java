@@ -32,7 +32,7 @@ public class SpringEmailUtil {
      * @param subject 邮件标题
      * @return
      */
-    public boolean sendEmail(String recipient, String content, String subject) {
+    public boolean sendEmail(String recipient, String subject, String content) {
         if (!checkRecipient(recipient)){
             return false;
         }
