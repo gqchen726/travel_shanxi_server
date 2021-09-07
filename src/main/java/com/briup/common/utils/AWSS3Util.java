@@ -27,8 +27,8 @@ public class AWSS3Util {
     public AmazonS3 getS3() {
         BasicAWSCredentials awsCredentials =
                 new BasicAWSCredentials(
-                        "AKIA4Y3BQB3S5MK3U44Z",
-                        "OABhqyShfr/+0/xix2T1k4hrIx8ihtcCMY4ZCzjS"
+                        "AKIA4Y3BQB3SU4U5XUEI",
+                        "NNTW0+hq4Qedkeu7DpFTMYEfpgm4e4ZW+T5sTvk0"
                 );
         AmazonS3 s3 = AmazonS3ClientBuilder
                 .standard()
@@ -43,7 +43,7 @@ public class AWSS3Util {
      */
     public void checkBucket() {
         if(!s3Client.doesBucketExist(BUCKETNAME)) {
-            Bucket bucket = s3Client.createBucket(BUCKETNAME);
+            s3Client.createBucket(BUCKETNAME);
         }
     }
 
