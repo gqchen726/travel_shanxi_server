@@ -111,14 +111,13 @@
             <version>3.5.2</version>
         </dependency>
 
-        <!-- aws-tools -->
+        <!-- tencent cos sdk -->
         <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk</artifactId>
-            <version>1.11.163</version>
+            <groupId>com.qcloud</groupId>
+            <artifactId>cos_api</artifactId>
+            <version>5.6.54</version>
         </dependency>
     </dependencies>
-
 
     <build>
         <plugins>

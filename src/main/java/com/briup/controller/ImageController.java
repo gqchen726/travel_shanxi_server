@@ -1,8 +1,8 @@
 package com.briup.controller;
 
-import com.amazonaws.services.s3.model.S3ObjectInputStream;
+
 import com.briup.common.respose.SimpleRespose;
-import com.briup.common.utils.AWSS3Util;
+import com.briup.common.utils.TencentCosUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -12,6 +12,7 @@ import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 @Controller
@@ -20,7 +21,7 @@ public class ImageController {
     private final Logger logger = LoggerFactory.getLogger(ImageController.class);
 
     @Resource
-    public AWSS3Util awss3Util;
+    public TencentCosUtil tencentCosUtil;
 
 
     @PostMapping("upload")
@@ -36,7 +37,7 @@ public class ImageController {
         // MultipartFile to File
         file.transferTo(excelFile);
 
-        awss3Util.put(fileName, excelFile);
+        tencentCosUtil.put(fileName, excelFile);
 
         //程序结束时，删除临时文件
         deleteFile(excelFile);
@@ -63,18 +64,24 @@ public class ImageController {
     @ResponseBody
     public SimpleRespose getImage(@RequestParam String fileName, HttpServletResponse response) throws IOException {
         ServletOutputStream outputStream = response.getOutputStream();
-        S3ObjectInputStream inputStream = awss3Util.get(fileName);
+        FileInputStream inputStream = tencentCosUtil.get(fileName);
         if (inputStream != null) {
-            awss3Util.readAndWrite(inputStream, outputStream);
+            tencentCosUtil.readAndWrite(inputStream, outputStream);
             return null;
         }
         return new SimpleRespose(null, "文件不存在", "1");
     }
 
+    @GetMapping("getPath")
+    @ResponseBody
+    public SimpleRespose getImagePath(@RequestParam String fileName) throws IOException {
+        return null;
+    }
+
     @GetMapping("delete")
     @ResponseBody
     public Object delete(@RequestParam String fileName){
-        String result = awss3Util.delete(fileName);
+        String result = tencentCosUtil.delete(fileName);
         if ("删除成功".equals(result)){
             return new SimpleRespose("","删除成功","0");
         }

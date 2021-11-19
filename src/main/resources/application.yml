@@ -1,5 +1,5 @@
 server:
-  port: ${PORT:8080}
+  port: ${PORT:10100}
   servlet:
     context-path: /
 spring:
@@ -9,11 +9,17 @@ spring:
 #    url: jdbc:mysql://127.0.0.1:3306/test2?serverTimezone=UTC&characterEncoding=utf-8
 #    username: root
 #    password: root
+    # heroku
+#    driver-class-name: com.mysql.jdbc.Driver
+#    url: jdbc:mysql://us-cdbr-east-04.cleardb.com:3306/heroku_0d608cf27c6fb48?serverTimezone=UTC&characterEncoding=utf-8&reconnect=true
+#    username: b60a7112815f1e
+#    password: 3ce8ec0a
+    # tencent
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://us-cdbr-east-04.cleardb.com:3306/heroku_0d608cf27c6fb48?serverTimezone=UTC&characterEncoding=utf-8&reconnect=true
-    username: b60a7112815f1e
-    password: 3ce8ec0a
-  jpa:
+    url: jdbc:mysql://110.42.157.115:3306/travel_shanxi?serverTimezone=UTC&characterEncoding=utf-8&reconnect=true
+    username: travel_shanxi
+    password: travel_shanxi
+#  jpa:
     show-sql: true
     hibernate:
       ddl-auto: update
@@ -33,3 +39,10 @@ spring:
 #  emailAccount: 2039256602@qq.com
 #  emailAccessKey: yqbhtkqxdjyecbge
 #  emailServer: smtp.qq.com
+tencent:
+  cos:
+    account:
+      secret-id: AKIDjIchV2JK4XjeLo1xc07xVmmVx83h4A0Z
+      secret-key: JMBk35qKdfSzFDvNuA9qHQIuGMBj0zh8
+    region: ap-shanghai
+    bucket: travel-shanxi-1304686700

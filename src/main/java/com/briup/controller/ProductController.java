@@ -2,7 +2,7 @@ package com.briup.controller;
 
 import com.briup.bean.product.Product;
 import com.briup.common.respose.SimpleRespose;
-import com.briup.common.utils.AWSS3Util;
+import com.briup.common.utils.TencentCosUtil;
 import com.briup.dao.ProductDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,7 +21,7 @@ public class ProductController {
     @Autowired
     private ProductDao productDao;
     @Resource
-    public AWSS3Util awss3Util;
+    public TencentCosUtil tencentCosUtil;
 
     @PostMapping("create")
     @ResponseBody
@@ -77,7 +77,7 @@ public class ProductController {
             if (resources != null) {
                 String[] split = resources.split(";");
                 for ( String s : split){
-                    awss3Util.delete(s);
+                    tencentCosUtil.delete(s);
                 }
             }
             productDao.deleteById(productCode);
