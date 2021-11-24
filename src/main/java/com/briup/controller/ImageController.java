@@ -27,17 +27,17 @@ public class ImageController {
     @PostMapping("upload")
     @ResponseBody
     public Object imageUpload(@RequestBody MultipartFile file) throws IOException {
-        logger.info("image/upload test -");
+        logger.info("image/upload start -");
         String originalFilename = file.getOriginalFilename();
         String fileName = originalFilename.substring(0, originalFilename.lastIndexOf("."));
         String fileType = originalFilename.substring(originalFilename.lastIndexOf("."));
         fileName = fileName.concat(String.valueOf(System.currentTimeMillis())).concat(fileType);
         final File excelFile = File.createTempFile(fileName, fileType);
-        logger.info("image/upload test --");
         // MultipartFile to File
         file.transferTo(excelFile);
 
         tencentCosUtil.put(fileName, excelFile);
+        logger.info("image/upload end --");
 
         //程序结束时，删除临时文件
         deleteFile(excelFile);
