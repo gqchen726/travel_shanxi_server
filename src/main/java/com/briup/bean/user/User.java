@@ -40,6 +40,8 @@ public class User {
     private List<Order> orders = new ArrayList<>();
     @Column(name = "avatar")
     private String avatar;
+    @Transient
+    private String checkCode;
 
     public String getAvatar() {
         return avatar;
@@ -145,4 +147,11 @@ public class User {
         this.orders = orders;
     }
 
+    public String getCheckCode() {
+        return checkCode;
+    }
+
+    public void setCheckCode(String checkCode) {
+        this.checkCode = checkCode;
+    }
 }

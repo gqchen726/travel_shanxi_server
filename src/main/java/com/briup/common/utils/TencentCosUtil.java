@@ -17,8 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 /**
  * @author: guoqing.chen01@hand-china.com 2021-11-19 17:09
@@ -28,20 +27,20 @@ import java.util.concurrent.Executors;
 public class TencentCosUtil {
 
     @Value("${tencent.cos.account.secret-id}")
-    private static String SECRETID;
+    private String SECRETID;
     @Value("${tencent.cos.account.secret-key}")
-    private static String SECRETKEY;
+    private String SECRETKEY;
     @Value("${tencent.cos.region}")
-    private static String REGION;
+    private String REGION;
     @Value("${tencent.cos.bucket}")
-    private static String BUCKET;
-    private static Logger logger = LoggerFactory.getLogger(TencentCosUtil.class);
+    private String BUCKET;
+    private Logger logger = LoggerFactory.getLogger(TencentCosUtil.class);
 
-    private static COSCredentials cosCredentials = null;
-    private static COSClient cosClient = null;
-    private static TransferManager transferManager = null;
+    private COSCredentials cosCredentials = null;
+    private COSClient cosClient = null;
+    private TransferManager transferManager = null;
 
-    static {
+    COSClient getCosClient() {
 
         cosCredentials = new BasicCOSCredentials(SECRETID, SECRETKEY);
         // 2 设置 bucket 的地域, COS 地域的简称请参照 https://cloud.tencent.com/document/product/436/6224
@@ -57,10 +56,16 @@ public class TencentCosUtil {
         if (!cosClient.doesBucketExist(BUCKET)) {
             cosClient.createBucket(BUCKET);
         }
-        transferManager = new TransferManager(cosClient);
+        ExecutorService executorService = new ThreadPoolExecutor(1, Integer.MAX_VALUE,
+                60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>());
+        transferManager = new TransferManager(cosClient, executorService);
+        return cosClient;
     }
 
     public String put(String uri, File file) {
+        if (cosClient == null) {
+            getCosClient();
+        }
         try {
             Upload upload = transferManager.upload(BUCKET, uri, file);
             UploadResult uploadResult = upload.waitForUploadResult();
@@ -68,14 +73,17 @@ public class TencentCosUtil {
         } catch (Throwable tb) {
             logger.error("上传失败");
             tb.printStackTrace();
-        } finally {
+        } /*finally {
             // 关闭 TransferManger
             transferManager.shutdownNow();
-        }
+        }*/
         return BUCKET+"/"+uri;
     }
 
     public FileInputStream get(String key) {
+        if (cosClient == null) {
+            getCosClient();
+        }
         try {
             final File file = File.createTempFile(key,"txt");
             GetObjectRequest getObjectRequest = new GetObjectRequest(BUCKET+"-"+SECRETID,key);
@@ -85,10 +93,10 @@ public class TencentCosUtil {
         } catch (Throwable tb) {
             logger.error("下载失败");
             tb.printStackTrace();
-        } finally {
+        } /*finally {
             // 关闭 TransferManger
             transferManager.shutdownNow();
-        }
+        }*/
         return null;
     }
 
@@ -96,11 +104,15 @@ public class TencentCosUtil {
      * 删除
      */
     public String delete(String key) {
+        if (cosClient == null) {
+            getCosClient();
+        }
         // 指定要删除的 bucket 和路径
         try {
-            cosClient.deleteObject(BUCKET + "-" + SECRETID, key);
+            cosClient.deleteObject(BUCKET,key);
             return "删除成功";
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return e.getMessage();
         }
     }

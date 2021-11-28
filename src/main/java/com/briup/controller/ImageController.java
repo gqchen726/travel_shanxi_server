@@ -85,6 +85,6 @@ public class ImageController {
         if ("删除成功".equals(result)){
             return new SimpleRespose("","删除成功","0");
         }
-        return new SimpleRespose(result,"删除失败","0");
+        return new SimpleRespose(result,"删除失败","1");
     }
 }

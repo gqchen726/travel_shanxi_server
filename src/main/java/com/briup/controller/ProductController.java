@@ -4,11 +4,13 @@ import com.briup.bean.product.Product;
 import com.briup.common.respose.SimpleRespose;
 import com.briup.common.utils.TencentCosUtil;
 import com.briup.dao.ProductDao;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -37,7 +39,7 @@ public class ProductController {
     @GetMapping("search")
     @ResponseBody
     public Object search(@RequestParam(name = "keywords", required = false) String keywords) {
-        if ("null".equals(keywords)) {
+        if ("null".equals(keywords) || "ALL".equals(keywords)) {
             return new SimpleRespose(productDao.findAll(), null, "0");
         }
         return new SimpleRespose(productDao.searchProduct(keywords), null, "0");
@@ -65,7 +67,17 @@ public class ProductController {
     @GetMapping("getAllCategory")
     @ResponseBody
     public Object getAllCategory(){
-        return new SimpleRespose(productDao.getAllCategory(),null,"0");
+        List<String> allCategory = productDao.getAllCategory();
+        HashSet<Object> categorys = new HashSet<>();
+        for(String category: allCategory) {
+            String[] split = category.split("#");
+            for (String s : split) {
+                if (StringUtils.isNoneEmpty(s)) {
+                    categorys.add(s);
+                }
+            }
+        }
+        return new SimpleRespose(categorys,null,"0");
     }
 
     @GetMapping("delete")

@@ -36,20 +36,44 @@ public class UserController {
     @ResponseBody
     public Object login(@RequestBody User user) {
         Optional<User> one = userDao.findById(user.getMobileNumber());
-        if (one.isPresent()) {
-            if (one.get().getPassword().equals(user.getPassword())) {
-                return new SimpleRespose(one.get(), "登录成功", "0");
+        String message = "登录成功";
+        String code = "0";
+        User resUser = one.isPresent() ? one.get() : null;
+        if (!one.isPresent()) {
+            message = "登录失败,该用户不存在";
+            code = "1";
+        } else {
+            if (StringUtils.isEmpty(user.getPassword())) {
+                if (!user.getCheckCode().equals(redisUtil.get(user.getMobileNumber()))) {
+                    message = "登录失败,验证码错误";
+                    code = "1";
+                }
+            } else {
+                if (!one.get().getPassword().equals(user.getPassword())) {
+                    message = "登录失败,用户名或密码错误";
+                    code = "1";
+                }
             }
         }
-        return new SimpleRespose(null, "用户名或密码错误", "1");
+        return new SimpleRespose(resUser, message, code);
+
     }
 
-    @RequestMapping("/create")
+    @RequestMapping("/register")
     @ResponseBody
-    public Object create(@RequestBody User user) {
-        Optional<User> byId = userDao.findById(user.getMobileNumber());
-        if (byId.isPresent()) {
-            return new SimpleRespose(null, "创建失败，该手机号已被注册", "1");
+    public Object register(@RequestBody User user) {
+        Optional<User> op = userDao.findById(user.getMobileNumber());
+        if (userDao.findById(user.getMobileNumber()).isPresent()) {
+            return new SimpleRespose(null, "注册失败，该手机号已被注册", "1");
+        }
+        User tempUser = new User();
+        tempUser.setEmail(user.getEmail());
+        if (userDao.findOne(Example.of(tempUser)).isPresent()) {
+            return new SimpleRespose(null, "注册失败，该邮箱已被注册", "1");
+        }
+
+        if (StringUtils.isEmpty(user.getCheckCode()) || !user.getCheckCode().equals(redisUtil.get(user.getMobileNumber()))) {
+            return new SimpleRespose(null, "注册失败，验证码不正确", "1");
         }
         String registerCode = user.getRegisterCode();
         if (null != registerCode && !StringUtils.isEmpty(registerCode)){
@@ -57,11 +81,11 @@ public class UserController {
                 user.setAdmin("true");
             }
         }
-        return new SimpleRespose(userDao.save(user), "创建成功", "0");
+        return new SimpleRespose(userDao.save(user), "注册成功", "0");
     }
 
     /**
-     * 生成随机6位数邀请码
+     * 生成随机6位验证码
      *
      * @return
      */
@@ -125,8 +149,7 @@ public class UserController {
                     return new SimpleRespose(null, "密码修改失败，请确认旧密码", "1");
                 }
             }
-            Jedis connect = redisUtil.getConnect();
-            String code = connect.get(changePassword.getMobileNumber());
+            String code = redisUtil.get(changePassword.getMobileNumber()).toString();
             if (!StringUtils.isEmpty(code)){
                 if (code.equals(changePassword.getCheckCode())){
                     byId.get().setPassword(changePassword.getNewPassword());
@@ -138,32 +161,44 @@ public class UserController {
         return null;
     }
 
+    /**
+     * 发送注册邮件验证码
+     * @param mobileNumber
+     * @param email
+     * @return
+     * @throws Exception
+     */
     @GetMapping("sendEmail")
     @ResponseBody
     public Object sendEmail(@RequestParam(name = "mobileNumber",required = true) String mobileNumber, @RequestParam (name = "email",required = false) String email) throws Exception {
-        if (email != null ){
-            String content = "您正在进行注册操作，验证码为111111，如非本人操作，请忽略";
-            String subject = "操作验证";
-            String randomString = getRandomString();
-            content = content.replaceAll("111111",randomString);
-            emailUtils.sendEmail(email, subject, content);
-            return new SimpleRespose(null,"success","0");
+        //email为空时发送更改密码邮箱验证码
+        //email不为空时发送注册邮箱验证码
+
+        //生成6位随机验证码
+        String randomString = getRandomString();
+        //存入redis
+        if (!StringUtils.isEmpty(randomString)) {
+            redisUtil.put(mobileNumber,randomString);
         }
-        Optional<User> byId = userDao.findById(mobileNumber);
-        if (byId.isPresent()){
-            String account = byId.get().getEmail();
-            String content = "您正在通过邮件修改密码，您的验证码为 111111 ,如非本人操作，请忽略";
-            String subject = "操作验证";
-            String randomString = getRandomString();
-            content = content.replaceAll("111111",randomString);
-            if(emailUtils.sendEmail(account, subject, content)){
-                Jedis connect = redisUtil.getConnect();
-                connect.set(mobileNumber,randomString);
-                connect.expire(mobileNumber,300);
-                return new SimpleRespose(null,"success","0");
+        String emailContent = null;
+        String emailSubject = "账户操作验证";
+        String emailAccount = email;
+        if (emailAccount != null ){
+            emailContent = "您正在进行注册操作，验证码为111111，如非本人操作，请忽略";
+        } else {
+            Optional<User> byId = userDao.findById(mobileNumber);
+            if (byId.isPresent()){
+                emailAccount = byId.get().getEmail();
+                emailContent = "您正在通过邮件修改密码，您的验证码为 111111 ,如非本人操作，请忽略";
+
             }
         }
-        return null;
+        emailContent = emailContent.replaceAll("111111",randomString);
+        if(emailUtils.sendEmail(emailAccount, emailSubject, emailContent)){
+            return new SimpleRespose(null,"邮件发送成功","0");
+        } else {
+            return new SimpleRespose(null,"邮件发送失败","1");
+        }
     }
 
 }
